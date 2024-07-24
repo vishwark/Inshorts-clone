@@ -14,6 +14,7 @@ import 'package:inshorts_clone/presentation_layer/pages/news.dart';
 import 'package:inshorts_clone/presentation_layer/pages/settings.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/settings.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/sign_in_options.dart';
+import 'package:inshorts_clone/utility/theme/theme_data.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
@@ -44,6 +45,13 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _buildApp(BuildContext context, SettingsState state) {
+    final settingsBloc =
+        context.read<SettingsBloc>(); // Get the instance of SettingsBloc
+    bool darkMode = false;
+    if (state is SettingsLoaded) {
+      print("dark mode : ${state.isDarkTheme} 111111111111111");
+      darkMode = state.isDarkTheme;
+    }
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => OffsetCubit()),
@@ -51,17 +59,16 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => FavoriteCategoryCubit()),
         BlocProvider(
             create: (context) =>
-                NewsDataBloc()), // New instance of NewsDataBloc
+                NewsDataBloc(settingsBloc)), // New instance of NewsDataBloc
         BlocProvider(
-            create: (context) =>
-                SuggestedTopicsBloc()), // New instance of SuggestedTopicsBloc
+            create: (context) => SuggestedTopicsBloc(
+                settingsBloc)), // New instance of SuggestedTopicsBloc
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
-          useMaterial3: true,
-        ),
+        theme: MyThemeData().lightTheme(), // Light theme
+        darkTheme: MyThemeData().darkTheme(),
+        themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
         home: PageContainer(), // Replace with your home page
       ),
     );

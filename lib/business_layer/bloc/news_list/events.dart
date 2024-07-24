@@ -8,10 +8,12 @@ class FetchNews extends NewsEvents {
   String category;
   String? offset;
   String? addTo;
+  bool clearCache;
   FetchNews({
     required this.category,
     required this.offset,
     required this.addTo,
+    required this.clearCache,
   });
 }
 

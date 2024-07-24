@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 part 'events.dart';
@@ -5,6 +7,8 @@ part 'state.dart';
 
 // SettingsBloc
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
+  final _languageStreamController = StreamController<String>.broadcast();
+  Stream<String> get languageStream => _languageStreamController.stream;
   SettingsBloc() : super(SettingsInitial()) {
     on<LoadSettings>(_onLoadSettings);
     on<UpdateTheme>(_onUpdateTheme);
@@ -78,12 +82,18 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       UpdateLanguage event, Emitter<SettingsState> emit) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('language', event.language);
-
+    _languageStreamController.add(event.language); // Notify listeners
     final currentState = state as SettingsLoaded;
     emit(SettingsLoaded(
       isDarkTheme: currentState.isDarkTheme,
       notificationsEnabled: currentState.notificationsEnabled,
       language: event.language,
     ));
+  }
+
+  @override
+  Future<void> close() {
+    _languageStreamController.close();
+    return super.close();
   }
 }

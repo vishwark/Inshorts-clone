@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inshorts_clone/business_layer/bloc/settings/settings_bloc.dart';
 import 'package:inshorts_clone/data_layer/api_repository.dart';
 import 'package:inshorts_clone/data_layer/api_services.dart';
 import 'package:inshorts_clone/data_layer/data_model/news_data.dart';
@@ -10,8 +13,12 @@ part 'state.dart';
 
 class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
   late ApiRepository apiRepository;
-  NewsDataBloc() : super(NewsLoading()) {
+  StreamSubscription<String>? _languageSubscription;
+  NewsDataBloc(SettingsBloc settingsBloc) : super(NewsLoading()) {
     apiRepository = ApiRepository();
+    _languageSubscription = settingsBloc.languageStream.listen((language) {
+      add(clearAndRefetchNews());
+    });
 
     on<FetchNews>((event, emit) => fetchData(event, emit));
     on<clearAndRefetchNews>((event, emit) => refetch(emit));
@@ -22,6 +29,7 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
       offset: null,
       category: 'all_news',
       addTo: 'bottom',
+      clearCache: false,
     ));
   }
 
@@ -43,7 +51,9 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
         currentData = (state as TopStoriesNewsLoaded).newsData;
       }
       List<NewsData> updatedData;
-      if (event.addTo == 'top') {
+      if (event.clearCache) {
+        updatedData = data.newsList;
+      } else if (event.addTo == 'top') {
         updatedData = [...data.newsList, ...currentData.newsList];
       } else {
         updatedData = [...currentData.newsList, ...data.newsList];
@@ -83,5 +93,22 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
     }
   }
 
-  refetch(Emitter<NewsState> emit) async {}
+  refetch(Emitter<NewsState> emit) async {
+    final prefs = await SharedPreferences.getInstance();
+    String category =
+        'all_news'; // Fetch the last selected category from prefs or state
+    String language = prefs.getString('language') ?? 'en';
+    add(FetchNews(
+      offset: null,
+      category: category,
+      addTo: 'bottom',
+      clearCache: true,
+    ));
+  }
+
+  @override
+  Future<void> close() {
+    _languageSubscription?.cancel();
+    return super.close();
+  }
 }

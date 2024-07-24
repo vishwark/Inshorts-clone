@@ -169,12 +169,18 @@ class _SettingsState extends State<Settings> {
                       Text(
                         "Save Your Preferences",
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w500),
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
                       Text(
                         "Sign in to save your Likes\nand Bookmarks.",
                         style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w500),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
                       SizedBox(
                         height: 20,
@@ -189,7 +195,9 @@ class _SettingsState extends State<Settings> {
                               },
                               child: Text(
                                 'Sign In',
-                                style: TextStyle(fontSize: 17),
+                                style: TextStyle(
+                                  fontSize: 17,
+                                ),
                               )),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,

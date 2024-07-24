@@ -24,8 +24,12 @@ class _NewsPageState extends State<NewsPage> {
   PageController controller = PageController();
   Future<void> onRefresh(String offset) {
     return Future.delayed(Duration(microseconds: 1000), () {
-      BlocProvider.of<NewsDataBloc>(context)
-          .add(FetchNews(offset: offset, category: 'all_news', addTo: 'top'));
+      BlocProvider.of<NewsDataBloc>(context).add(FetchNews(
+        offset: offset,
+        category: 'all_news',
+        addTo: 'top',
+        clearCache: false,
+      ));
     });
   }
 
@@ -38,9 +42,12 @@ class _NewsPageState extends State<NewsPage> {
     print('$offset 111111111111---offset');
     String category =
         BlocProvider.of<FavoriteCategoryCubit>(context).state.favoriteCategory;
-    context
-        .read<NewsDataBloc>()
-        .add(FetchNews(category: category, addTo: "bottom", offset: offset));
+    context.read<NewsDataBloc>().add(FetchNews(
+          category: category,
+          addTo: "bottom",
+          offset: offset,
+          clearCache: false,
+        ));
   }
 
   @override

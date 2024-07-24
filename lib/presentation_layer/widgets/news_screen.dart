@@ -76,7 +76,6 @@ class _NewsScreenState extends State<NewsScreen> {
                 widget.newsData.title,
                 style: TextStyle(
                   fontSize: 20,
-                  color: Color(0xFF161616),
                 ),
               ),
             ),
@@ -89,7 +88,6 @@ class _NewsScreenState extends State<NewsScreen> {
                 widget.newsData.content,
                 style: TextStyle(
                   fontSize: 17,
-                  color: Color(0xFF585858),
                 ),
               ),
             ),
