@@ -12,6 +12,7 @@ import 'package:inshorts_clone/data_layer/data_model/news_category.dart';
 import 'package:inshorts_clone/data_layer/data_model/suggested_topic.dart';
 import 'package:inshorts_clone/presentation_layer/pages/settings.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/category_tile.dart';
+import 'package:inshorts_clone/presentation_layer/widgets/network_disconnected.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/suggested_topics_tile.dart';
 
 class Discover extends StatefulWidget {
@@ -188,6 +189,8 @@ class _DiscoverState extends State<Discover> {
               } else if (state is SuggestedTopicsError) {
                 return const Center(
                     child: Text("Sorry failed to fetch topics!"));
+              } else if (state is SuggestedTopicsNetworkError) {
+                return NetworkDisconnected();
               } else {
                 return const Center(
                     child: Text("Ohh no! this was not expected"));

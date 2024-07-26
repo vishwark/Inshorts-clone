@@ -42,3 +42,5 @@ class CustomSelectNewsLoaded extends NewsState {
 class NewsLoading extends NewsState {}
 
 class Error extends NewsState {}
+
+class NewsNetworkError extends NewsState {}

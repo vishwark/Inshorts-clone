@@ -12,3 +12,5 @@ class SuggestedTopicsLoaded extends SuggestedTopicsState {
 }
 
 class SuggestedTopicsError extends SuggestedTopicsState {}
+
+class SuggestedTopicsNetworkError extends SuggestedTopicsState {}

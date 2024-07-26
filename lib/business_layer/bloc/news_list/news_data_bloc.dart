@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inshorts_clone/business_layer/bloc/settings/settings_bloc.dart';
 import 'package:inshorts_clone/data_layer/api_repository.dart';
 import 'package:inshorts_clone/data_layer/api_services.dart';
 import 'package:inshorts_clone/data_layer/data_model/news_data.dart';
 import 'package:inshorts_clone/data_layer/data_model/news_list.dart';
+import 'package:inshorts_clone/utility/connectvity_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'events.dart';
@@ -13,9 +15,11 @@ part 'state.dart';
 
 class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
   late ApiRepository apiRepository;
+  late Connectivity _connectivity;
   StreamSubscription<String>? _languageSubscription;
   NewsDataBloc(SettingsBloc settingsBloc) : super(NewsLoading()) {
     apiRepository = ApiRepository();
+    _connectivity = Connectivity();
     _languageSubscription = settingsBloc.languageStream.listen((language) {
       add(clearAndRefetchNews());
     });
@@ -33,7 +37,14 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
     ));
   }
 
+  Future<bool> isDisConnected() async {
+    var connectivityResult = await _connectivity.checkConnectivity();
+    return connectivityResult[0] == ConnectivityResult.none;
+  }
+
   fetchData(FetchNews event, Emitter<NewsState> emit) async {
+    bool networkDisconnected = await isDisConnected();
+    if (networkDisconnected) return emit(NewsNetworkError());
     final prefs = await SharedPreferences.getInstance();
     String language = prefs.getString('language') ?? 'en';
     try {
@@ -89,6 +100,9 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
   fetchCustomSelectNews(
       FetchCustomSelectNews event, Emitter<NewsState> emit) async {
     try {
+      //check for netwok & show proper msg before api calls
+      bool networkDisconnected = await isDisConnected();
+      if (networkDisconnected) return emit(NewsNetworkError());
       final prefs = await SharedPreferences.getInstance();
       String language = prefs.getString('language') ?? 'en';
 

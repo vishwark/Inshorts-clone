@@ -9,6 +9,7 @@ import 'package:inshorts_clone/data_layer/data_model/news_list.dart';
 import 'package:inshorts_clone/presentation_layer/pages/discover.dart';
 import 'package:inshorts_clone/presentation_layer/pages/settings.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/loader.dart';
+import 'package:inshorts_clone/presentation_layer/widgets/network_disconnected.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/news_screen.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/web_view.dart';
 
@@ -103,6 +104,8 @@ class _NewsPageState extends State<NewsPage> {
               .updateCurrentPageSourceUrl(
                   url: state.newsData.newsList[0].sourceUrl);
           return loadedStateWidget(state.newsData);
+        } else if (state is NewsNetworkError) {
+          return NetworkDisconnected();
         } else {
           return Center(child: Text("Some issue!"));
         }

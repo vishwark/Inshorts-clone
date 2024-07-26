@@ -15,7 +15,7 @@ class NetworkDisconnected extends StatelessWidget {
               'lib/assets/imgs/sad-cloud.png',
             ),
             Image.asset(
-              'lib/assets/imgs/fetching.png',
+              'lib/assets/imgs/disconnected.png',
             ),
             Image.asset(
               'lib/assets/imgs/mob.png',
