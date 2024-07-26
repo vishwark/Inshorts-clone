@@ -17,7 +17,7 @@ import 'package:inshorts_clone/presentation_layer/widgets/sign_in_options.dart';
 import 'package:inshorts_clone/utility/theme/theme_data.dart';
 
 void main() {
-  HttpOverrides.global = MyHttpOverrides();
+  //HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -75,12 +75,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    final client = super.createHttpClient(context);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => true;
-    return client;
-  }
-}
+// class MyHttpOverrides extends HttpOverrides {
+//   @override
+//   HttpClient createHttpClient(SecurityContext? context) {
+//     final client = super.createHttpClient(context);
+//     client.badCertificateCallback =
+//         (X509Certificate cert, String host, int port) => true;
+//     return client;
+//   }
+// }
