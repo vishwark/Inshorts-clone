@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
                 settingsBloc)), // New instance of SuggestedTopicsBloc
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'inshorts',
         theme: MyThemeData().lightTheme(), // Light theme
         darkTheme: MyThemeData().darkTheme(),
         themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
@@ -74,7 +74,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 // class MyHttpOverrides extends HttpOverrides {
 //   @override
 //   HttpClient createHttpClient(SecurityContext? context) {
