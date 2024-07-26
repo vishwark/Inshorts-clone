@@ -35,9 +35,11 @@ class ApiServices {
   }
 
   Future<http.Response> fetchCustomSelectNews(
-      {required String category, required String language}) async {
+      {required String category,
+      required String language,
+      required String offset}) async {
     String url =
-        "https://inshorts.com/api/$language/search/trending_topics/$category?page=1&type=CUSTOM_CATEGORY";
+        "https://inshorts.com/api/$language/search/trending_topics/$category?page=$offset&type=CUSTOM_CATEGORY";
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {

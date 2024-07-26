@@ -19,9 +19,14 @@ class FetchNews extends NewsEvents {
 
 class FetchCustomSelectNews extends NewsEvents {
   String category;
-  FetchCustomSelectNews({
-    required this.category,
-  });
+  String offset;
+  String? addTo;
+  bool clearCache;
+  FetchCustomSelectNews(
+      {required this.category,
+      required this.offset,
+      required this.addTo,
+      required this.clearCache});
 }
 
 class clearAndRefetchNews extends NewsEvents {}

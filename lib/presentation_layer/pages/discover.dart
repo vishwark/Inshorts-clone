@@ -43,10 +43,11 @@ class _DiscoverState extends State<Discover> {
         label: "TRENDING",
         tag: 'trending'),
     NewsCategory(
-        imgUrl: 'lib/assets/imgs/cat_bookmarks.png',
-        isSelected: false,
-        label: "BOOKMARKS",
-        tag: 'bookmarks')
+      imgUrl: 'lib/assets/imgs/cat_bookmarks.png',
+      isSelected: false,
+      label: "BOOKMARKS",
+      tag: 'bookmarks',
+    )
   ];
 
   @override
@@ -58,7 +59,6 @@ class _DiscoverState extends State<Discover> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: SizedBox.shrink(),
         title: Text("Categories and Topics"),
         centerTitle: false,
         actions: [
@@ -72,14 +72,6 @@ class _DiscoverState extends State<Discover> {
           SizedBox(
             width: 16,
           ),
-          GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: FaIcon(FontAwesomeIcons.arrowRight)),
-          SizedBox(
-            width: 20,
-          )
         ],
       ),
       body: Padding(
@@ -101,7 +93,15 @@ class _DiscoverState extends State<Discover> {
                           onTap: () {
                             context
                                 .read<FavoriteCategoryCubit>()
-                                .setFavoriteCategory(categories[index].tag);
+                                .setFavoriteCategory(categories[index].tag,
+                                    categories[index].label);
+                            context.read<NewsDataBloc>().add(FetchNews(
+                                  category: categories[index].tag,
+                                  offset: null,
+                                  addTo: 'bottom',
+                                  clearCache: true,
+                                ));
+                            Navigator.of(context).pop();
                           },
                           child: CategoryTile(
                             imgUrl: categories[index].imgUrl,
@@ -154,12 +154,31 @@ class _DiscoverState extends State<Discover> {
                     crossAxisCount: 3,
                     children:
                         List.generate(state.suggestedTopics.length, (index) {
-                      return SuggestedTopicsTile(
-                        nightModeImgUrl:
-                            state.suggestedTopics[index].nightModeImgUrl,
-                        label: state.suggestedTopics[index].label,
-                        imgUrl: state.suggestedTopics[index].imgUrl,
-                        tag: state.suggestedTopics[index].tag,
+                      return GestureDetector(
+                        onTap: () {
+                          context
+                              .read<FavoriteCategoryCubit>()
+                              .setFavoriteCategory(
+                                state.suggestedTopics[index].tag,
+                                state.suggestedTopics[index].label,
+                              );
+                          context
+                              .read<NewsDataBloc>()
+                              .add(FetchCustomSelectNews(
+                                category: state.suggestedTopics[index].tag,
+                                offset: '1',
+                                addTo: 'bottom',
+                                clearCache: true,
+                              ));
+                          Navigator.of(context).pop();
+                        },
+                        child: SuggestedTopicsTile(
+                          nightModeImgUrl:
+                              state.suggestedTopics[index].nightModeImgUrl,
+                          label: state.suggestedTopics[index].label,
+                          imgUrl: state.suggestedTopics[index].imgUrl,
+                          tag: state.suggestedTopics[index].tag,
+                        ),
                       );
                     }),
                   ),

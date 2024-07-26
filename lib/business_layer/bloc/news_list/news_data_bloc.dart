@@ -23,7 +23,7 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
     on<FetchNews>((event, emit) => fetchData(event, emit));
     on<clearAndRefetchNews>((event, emit) => refetch(emit));
     on<FetchCustomSelectNews>(
-        (event, emit) => fetchCustomSelectNews(event.category, emit));
+        (event, emit) => fetchCustomSelectNews(event, emit));
     // Dispatch the initial FetchNews event during initialization
     add(FetchNews(
       offset: null,
@@ -36,13 +36,11 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
   fetchData(FetchNews event, Emitter<NewsState> emit) async {
     final prefs = await SharedPreferences.getInstance();
     String language = prefs.getString('language') ?? 'en';
-    print('$language   settings 11111111111111111111');
     try {
-      NewsList data = await apiRepository.getsNewsData(
-          event.offset, event.category, language);
-
+      // to store current data
       NewsList currentData = NewsList(newsList: [], offsetId: '');
-      if (state is AllNewsLoaded && event.category == 'all_news') {
+      if (state is AllNewsLoaded &&
+          (event.category == 'all_news' || event.category == 'bookmarks')) {
         currentData = (state as AllNewsLoaded).newsData;
       } else if (state is TrendingNewsLoaded && event.category == 'trending') {
         currentData = (state as TrendingNewsLoaded).newsData;
@@ -50,6 +48,14 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
           event.category == 'top_stories') {
         currentData = (state as TopStoriesNewsLoaded).newsData;
       }
+      emit(NewsLoading());
+      //fetch new data
+      NewsList data = await apiRepository.getsNewsData(
+          event.offset,
+          event.category == 'bookmarks' ? 'all_news' : event.category,
+          language);
+
+      //udpate the array based on request
       List<NewsData> updatedData;
       if (event.clearCache) {
         updatedData = data.newsList;
@@ -76,18 +82,37 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
                 NewsList(newsList: updatedData, offsetId: data.offsetId)));
       }
     } catch (e) {
-      print('$e 111111111111-error');
       emit(Error());
     }
   }
 
-  fetchCustomSelectNews(String category, Emitter<NewsState> emit) async {
+  fetchCustomSelectNews(
+      FetchCustomSelectNews event, Emitter<NewsState> emit) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       String language = prefs.getString('language') ?? 'en';
-      final NewsList data =
-          await apiRepository.getCustomSelectNews(category, language);
-      emit(CustomSelectNewsLoaded(category: category, newsData: data));
+
+      NewsList currentData = NewsList(newsList: [], offsetId: '');
+      if (state is CustomSelectNewsLoaded) {
+        currentData = (state as CustomSelectNewsLoaded).newsData;
+      }
+      emit(NewsLoading());
+      final NewsList data = await apiRepository.getCustomSelectNews(
+          event.category, language, event.offset);
+
+      //udpate the array based on request
+      List<NewsData> updatedData;
+      if (event.clearCache) {
+        updatedData = data.newsList;
+      } else if (event.addTo == 'top') {
+        updatedData = [...data.newsList, ...currentData.newsList];
+      } else {
+        updatedData = [...currentData.newsList, ...data.newsList];
+      }
+
+      emit(CustomSelectNewsLoaded(
+          category: event.category,
+          newsData: NewsList(newsList: updatedData, offsetId: data.offsetId)));
     } catch (e) {
       emit(Error());
     }

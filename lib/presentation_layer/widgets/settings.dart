@@ -6,7 +6,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inshorts_clone/business_layer/bloc/settings/settings_bloc.dart';
 
 import 'package:inshorts_clone/data_layer/data_model/toggle_data.dart';
+import 'package:inshorts_clone/presentation_layer/widgets/loader.dart';
+import 'package:inshorts_clone/presentation_layer/widgets/network_disconnected.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/sign_in_options.dart';
+import 'package:inshorts_clone/utility/theme/theme_data.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -69,6 +72,13 @@ class _SettingsState extends State<Settings> {
     'phone': FontAwesomeIcons.phone,
   };
   void showBottoSheet(BuildContext context, String selected) {
+    final ThemeData theme = Theme.of(context);
+    Color getColor(String language) {
+      return selected == language
+          ? Colors.blueAccent
+          : theme.textTheme.titleMedium?.color ?? Colors.black;
+    }
+
     showModalBottomSheet<void>(
       context: context,
       shape: RoundedRectangleBorder(
@@ -109,10 +119,9 @@ class _SettingsState extends State<Settings> {
                         Text(
                           languageOptions[index].language,
                           style: TextStyle(
-                              fontSize: 20,
-                              color: selected == languageOptions[index].language
-                                  ? Colors.blueAccent
-                                  : Colors.black),
+                            fontSize: 20,
+                            color: getColor(languageOptions[index].language),
+                          ),
                         )
                       ],
                     ),
@@ -136,6 +145,7 @@ class _SettingsState extends State<Settings> {
         title: Text('Options'),
         actions: [SizedBox.shrink()],
       ),
+      // drawer: NetworkDisconnected(),
       endDrawer: SignInOptions(),
       body: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
@@ -150,9 +160,9 @@ class _SettingsState extends State<Settings> {
             language = state.language;
             toggleData[2].value = isDarkTheme; // Night Mode
             toggleData[0].value = notificationsEnabled; // Notifications
-            print('$language ----1111111111111111-lan');
             selectedLanguage = language == 'en' ? 'English' : 'हिंदी';
           }
+          final avatarTheme = Theme.of(context).extension<AvatarTheme>();
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -200,19 +210,27 @@ class _SettingsState extends State<Settings> {
                                 ),
                               )),
                           Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children:
-                                  List.generate(loginOptions.length, (index) {
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: List.generate(
+                              loginOptions.length,
+                              (index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 4.0),
                                   child: CircleAvatar(
-                                    child: FaIcon(iconMap[loginOptions[index]]),
+                                    backgroundColor:
+                                        avatarTheme?.backgroundColor,
+                                    child: FaIcon(
+                                      iconMap[loginOptions[index]],
+                                      color: avatarTheme?.color,
+                                    ),
                                   ),
                                 );
-                              }))
+                              },
+                            ),
+                          )
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),

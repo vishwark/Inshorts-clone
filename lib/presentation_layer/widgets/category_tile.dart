@@ -16,6 +16,10 @@ class CategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color textColor = isSelected
+        ? theme.textTheme.titleMedium?.color ?? Colors.black
+        : Colors.grey;
     return Column(
       children: [
         AnimatedOpacity(
@@ -34,9 +38,7 @@ class CategoryTile extends StatelessWidget {
         Text(
           this.label,
           style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.black : Colors.grey),
+              fontSize: 12, fontWeight: FontWeight.bold, color: textColor),
         ),
       ],
     );

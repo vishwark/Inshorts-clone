@@ -47,12 +47,17 @@ class SuggestedTopicsTile extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [
-                          Color(0x00FFFFFF),
-                          Color(0xFFFFFFFF),
-                        ],
+                        colors: isDarkTheme
+                            ? [
+                                Color(0x80000000), // Semi-transparent black
+                                Color(0x00FFFFFF), // Fully transparent white
+                              ]
+                            : [
+                                Color(0xFFFFFFFF),
+                                Color(0x00FFFFFF),
+                              ],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                       ),

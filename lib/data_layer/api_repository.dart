@@ -32,7 +32,7 @@ class ApiRepository {
           category: category, offset: offset, language: language);
       final Map<String, dynamic> dataMap = json.decode(response.body);
       final List<dynamic> newsList = dataMap['data']['news_list'];
-      final offsetId = dataMap['data']['min_news_id'];
+      final offsetId = dataMap['data']?['min_news_id'] ?? '';
 
       // BlocProvider.of<OffsetCubit>(context).updateOffset(offsetId);
       // todo : update the offset value in cubit used for pagination
@@ -45,16 +45,21 @@ class ApiRepository {
     }
   }
 
-  Future<NewsList> getCustomSelectNews(String category, String language) async {
+  Future<NewsList> getCustomSelectNews(
+      String category, String language, String offset) async {
     try {
       final response = await apiServices.fetchCustomSelectNews(
-          category: category, language: language);
+          category: category, language: language, offset: offset);
       final Map<String, dynamic> dataMap = json.decode(response.body);
       final List<dynamic> newsList = dataMap['data']['news_list'];
-      final offsetId = dataMap['data'][
-          'min_news_id']; // todo : update the offset value in cubit used for pagination
-      final newsArray = newsList.map((news) => NewsData.fromMap(news)).toList();
-      return NewsList(newsList: newsArray, offsetId: offsetId);
+      // Filter only the news items with type "NEWS"
+      final List<dynamic> filteredNewsList =
+          newsList.where((news) => news['type'] == 'NEWS').toList();
+      final newsArray =
+          filteredNewsList.map((news) => NewsData.fromMap(news)).toList();
+      var offsetId = dataMap['data']?['page_num'] ?? '';
+
+      return NewsList(newsList: newsArray, offsetId: (offsetId + 1).toString());
     } catch (e) {
       throw Exception('Failed to parse custom select news: $e');
     }
