@@ -1,16 +1,12 @@
-# inshorts_clone
+# Inshorts Clone
+A Flutter-based application inspired by the popular news aggregator app, Inshorts. This app provides concise and summarized news articles, allowing users to stay updated with current events efficiently.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<h1>Features</h1>
+**Concise News Summaries**: View short, summarized news articles on various topics.
+**Categorization**: Browse news by categories such as Technology, Sports, Entertainment, and more.
+**Dynamic UI**: Responsive design with smooth scrolling and swipe gestures.
+**Dark Mode & Light Mode**: Switch between dark and light themes for a comfortable reading experience.
+**Language Option**s: Choose between Hindi and English to read news in your preferred language.
+**Infinite Scrolling**: Automatically load more news articles as you scroll down, providing a seamless reading experience.
+**In-App Browser**: View the full article and source data directly within the app using the integrated browser.
+**Share Option**: Easily share news articles with others through various sharing options integrated into the app.
