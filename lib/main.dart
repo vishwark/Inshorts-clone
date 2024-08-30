@@ -8,36 +8,24 @@ import 'package:inshorts_clone/business_layer/bloc/suggested_new_category/sugges
 import 'package:inshorts_clone/business_layer/cubit/offset_cubit.dart';
 import 'package:inshorts_clone/business_layer/cubit/current_page_source_cubit.dart';
 import 'package:inshorts_clone/business_layer/cubit/fav_category/fav_news_category.dart';
-import 'package:inshorts_clone/presentation_layer/pages/discover.dart';
 import 'package:inshorts_clone/presentation_layer/pages/index.dart';
-import 'package:inshorts_clone/presentation_layer/pages/news.dart';
-import 'package:inshorts_clone/presentation_layer/pages/settings.dart';
-import 'package:inshorts_clone/presentation_layer/widgets/settings.dart';
-import 'package:inshorts_clone/presentation_layer/widgets/sign_in_options.dart';
 import 'package:inshorts_clone/utility/theme/theme_data.dart';
 
 void main() {
-  //HttpOverrides.global = MyHttpOverrides();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SettingsBloc(),
-      child: BlocConsumer<SettingsBloc, SettingsState>(
-        listener: (context, state) {
-          if (state is SettingsLoaded) {
-            print("11111111111111----settings updated");
-            // You can add additional logic here if needed when SettingsUpdated state is emitted
-          }
-        },
+      //if something changes in setting(Language, theme), rebuild the app
+      child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
-          // Ensure BlocProvider recreates the blocs on language or theme change
           return _buildApp(context, state);
         },
       ),
@@ -49,7 +37,6 @@ class MyApp extends StatelessWidget {
         context.read<SettingsBloc>(); // Get the instance of SettingsBloc
     bool darkMode = false;
     if (state is SettingsLoaded) {
-      print("dark mode : ${state.isDarkTheme} 111111111111111");
       darkMode = state.isDarkTheme;
     }
     return MultiBlocProvider(
@@ -58,8 +45,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => CurrentPageSourceCubit()),
         BlocProvider(create: (context) => FavoriteCategoryCubit()),
         BlocProvider(
-            create: (context) =>
-                NewsDataBloc(settingsBloc)), // New instance of NewsDataBloc
+            create: (context) => NewsDataBloc(
+                settingsBloc)), // padding settings bloc to access the theme/language while fetching data
         BlocProvider(
             create: (context) => SuggestedTopicsBloc(
                 settingsBloc)), // New instance of SuggestedTopicsBloc
@@ -74,12 +61,14 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-// class MyHttpOverrides extends HttpOverrides {
-//   @override
-//   HttpClient createHttpClient(SecurityContext? context) {
-//     final client = super.createHttpClient(context);
-//     client.badCertificateCallback =
-//         (X509Certificate cert, String host, int port) => true;
-//     return client;
-//   }
-// }
+
+// uncomment this if Network image not loading due to certificate issue
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    final client = super.createHttpClient(context);
+    client.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    return client;
+  }
+}

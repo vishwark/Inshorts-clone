@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inshorts_clone/business_layer/cubit/offset_cubit.dart';
 import 'package:inshorts_clone/business_layer/cubit/current_page_source_cubit.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -15,16 +14,12 @@ class _WebViewContainerState extends State<WebViewContainer> {
   late final WebViewController controller;
   @override
   void initState() {
-    controller = WebViewController()
-      ..loadRequest(
-        Uri.parse('https://flutter.dev'),
-      );
+    controller = WebViewController();
     // Access initial URL state
     final initialUrl = context.read<CurrentPageSourceCubit>().state.uri;
     if (initialUrl.isNotEmpty) {
       controller.loadRequest(Uri.parse(initialUrl));
     }
-
     super.initState();
   }
 
@@ -38,16 +33,8 @@ class _WebViewContainerState extends State<WebViewContainer> {
             },
             child: Icon(Icons.cancel)),
       ),
-      body: BlocListener<CurrentPageSourceCubit, CurrentPageUriState>(
-        listener: (context, state) {
-          final url = state.uri;
-          if (url.isNotEmpty) {
-            controller.loadRequest(Uri.parse(url));
-          }
-        },
-        child: WebViewWidget(
-          controller: controller,
-        ),
+      body: WebViewWidget(
+        controller: controller,
       ),
     );
   }

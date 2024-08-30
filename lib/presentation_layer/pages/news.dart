@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inshorts_clone/business_layer/bloc/news_list/news_data_bloc.dart';
 import 'package:inshorts_clone/business_layer/cubit/fav_category/fav_news_category.dart';
-import 'package:inshorts_clone/business_layer/cubit/offset_cubit.dart';
 import 'package:inshorts_clone/business_layer/cubit/current_page_source_cubit.dart';
-import 'package:inshorts_clone/data_layer/data_model/news_data.dart';
 import 'package:inshorts_clone/data_layer/data_model/news_list.dart';
 import 'package:inshorts_clone/presentation_layer/pages/discover.dart';
-import 'package:inshorts_clone/presentation_layer/pages/settings.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/loader.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/network_disconnected.dart';
 import 'package:inshorts_clone/presentation_layer/widgets/news_screen.dart';
@@ -21,7 +18,7 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  late String offset;
+  String offset = "";
   PageController controller = PageController();
   final ScrollController _scrollController = ScrollController();
   Future<void> onRefresh(String offset) {
@@ -43,11 +40,6 @@ class _NewsPageState extends State<NewsPage> {
     } else {
       controller.jumpToPage(0);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   void fetchNext10News({required String offset, required String position}) {
@@ -73,6 +65,13 @@ class _NewsPageState extends State<NewsPage> {
     }
   }
 
+  void setOffsetAndFirstNewsPageSourceUrl(String offset, String url) {
+    //this function will set the offset and first news source website link on first load
+    offset = offset;
+    BlocProvider.of<CurrentPageSourceCubit>(context)
+        .updateCurrentPageSourceUrl(url: url);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -80,29 +79,12 @@ class _NewsPageState extends State<NewsPage> {
         if (state is NewsLoading) {
           return Loader();
         } else if (state is AllNewsLoaded) {
-          print("new data udpated33333333333 ${state.newsData.offsetId}");
-          offset = state.newsData.offsetId;
-          BlocProvider.of<CurrentPageSourceCubit>(context)
-              .updateCurrentPageSourceUrl(
-                  url: state.newsData.newsList[0].sourceUrl);
           return loadedStateWidget(state.newsData);
         } else if (state is TrendingNewsLoaded) {
-          offset = state.newsData.offsetId;
-          BlocProvider.of<CurrentPageSourceCubit>(context)
-              .updateCurrentPageSourceUrl(
-                  url: state.newsData.newsList[0].sourceUrl);
           return loadedStateWidget(state.newsData);
         } else if (state is TopStoriesNewsLoaded) {
-          offset = state.newsData.offsetId;
-          BlocProvider.of<CurrentPageSourceCubit>(context)
-              .updateCurrentPageSourceUrl(
-                  url: state.newsData.newsList[0].sourceUrl);
           return loadedStateWidget(state.newsData);
         } else if (state is CustomSelectNewsLoaded) {
-          offset = state.newsData.offsetId;
-          BlocProvider.of<CurrentPageSourceCubit>(context)
-              .updateCurrentPageSourceUrl(
-                  url: state.newsData.newsList[0].sourceUrl);
           return loadedStateWidget(state.newsData);
         } else if (state is NewsNetworkError) {
           return NetworkDisconnected();
@@ -114,13 +96,14 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   Widget loadedStateWidget(NewsList state) {
+    setOffsetAndFirstNewsPageSourceUrl(
+        state.offsetId, state.newsList[0].sourceUrl);
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () => onRefresh(state.offsetId),
         child: PageView(
           scrollDirection: Axis.vertical,
           controller: controller,
-          physics: ClampingScrollPhysics(),
           onPageChanged: (num) {
             BlocProvider.of<CurrentPageSourceCubit>(context)
                 .updateCurrentPageSourceUrl(url: state.newsList[num].sourceUrl);

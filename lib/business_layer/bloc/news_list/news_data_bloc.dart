@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'events.dart';
 part 'state.dart';
 
+// this bloc provides the news state & events
 class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
   late ApiRepository apiRepository;
   late Connectivity _connectivity;
@@ -59,7 +60,9 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
           event.category == 'top_stories') {
         currentData = (state as TopStoriesNewsLoaded).newsData;
       }
-      emit(NewsLoading());
+      if (event.addTo == 'top')
+        emit(
+            NewsLoading()); // if we show loading state while lazy loading(bottom) the data, after fetch data will be shown from top again.
       //fetch new data
       NewsList data = await apiRepository.getsNewsData(
           event.offset,
@@ -110,7 +113,7 @@ class NewsDataBloc extends Bloc<NewsEvents, NewsState> {
       if (state is CustomSelectNewsLoaded) {
         currentData = (state as CustomSelectNewsLoaded).newsData;
       }
-      emit(NewsLoading());
+      if (event.addTo == 'top') emit(NewsLoading());
       final NewsList data = await apiRepository.getCustomSelectNews(
           event.category, language, event.offset);
 

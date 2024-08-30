@@ -23,10 +23,7 @@ class Discover extends StatefulWidget {
 }
 
 class _DiscoverState extends State<Discover> {
-  //move to cubit
   String selectedCategory = 'top_stories';
-
-  //move to constant
   List<NewsCategory> categories = [
     NewsCategory(
         imgUrl: 'lib/assets/imgs/cat_top_stories.png',
@@ -50,11 +47,6 @@ class _DiscoverState extends State<Discover> {
       tag: 'bookmarks',
     )
   ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,22 +122,6 @@ class _DiscoverState extends State<Discover> {
                   decorationStyle: TextDecorationStyle.solid,
                 ),
               ),
-            ),
-            Padding(
-              // remove this after testing
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-              child: BlocBuilder<NewsDataBloc, NewsState>(
-                  builder: (context, state) {
-                if (state is NewsLoading) {
-                  return CircularProgressIndicator();
-                } else if (state is AllNewsLoaded) {
-                  return Center(
-                      child: Text(state.newsData.newsList.length.toString()));
-                } else {
-                  print('11111111111111 $state');
-                  return Center(child: Text("Some issue!"));
-                }
-              }),
             ),
             BlocBuilder<SuggestedTopicsBloc, SuggestedTopicsState>(
                 builder: (context, state) {

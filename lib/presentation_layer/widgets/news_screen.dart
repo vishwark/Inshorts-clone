@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inshorts_clone/business_layer/cubit/fav_category/fav_news_category.dart';
 import 'package:inshorts_clone/business_layer/cubit/fav_category/state.dart';
@@ -148,94 +147,100 @@ class _NewsScreenState extends State<NewsScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: showBottomBar
-          ? Container(
-              height: 60, // Set the desired height for your bottom bar
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+      bottomNavigationBar:
+          showBottomBar ? showNavWithShareOption() : bottomNavContent(),
+    );
+  }
+
+  Widget showNavWithShareOption() {
+    return Container(
+      height: 60,
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey,
+            width: .5,
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          IconButton(
+            icon: Icon(Icons.share, color: Colors.blueAccent),
+            onPressed: () {
+              Share.shareUri(Uri.parse(widget.newsData.shortenedUrl));
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.bookmark, color: Colors.blueAccent),
+            onPressed: () {
+              // Implement bookmark functionality here
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget bottomNavContent() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => WebViewContainer()));
+      },
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.network(
+              widget.newsData.imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
               decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.grey, // Set the color of the border
-                    width: .5, // Set the width of the border
-                  ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.5),
+                    Colors.black.withOpacity(0.5),
+                  ],
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.share, color: Colors.blueAccent),
-                    onPressed: () {
-                      Share.shareUri(Uri.parse(widget.newsData.shortenedUrl));
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.bookmark, color: Colors.blueAccent),
-                    onPressed: () {
-                      // Implement bookmark functionality here
-                    },
-                  ),
-                ],
-              ),
-            )
-          : GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => WebViewContainer()));
-              },
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Image.network(
-                      widget.newsData.imageUrl,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.5),
-                            Colors.black.withOpacity(0.5),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 60, // Set the desired height for your bottom bar
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start, // Align text to the left
-                      children: [
-                        Text(
-                          widget.newsData.bottomHeadline,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          widget.newsData.bottomText,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
             ),
+          ),
+          Container(
+            height: 60, // Set the desired height for your bottom bar
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // Align text to the left
+              children: [
+                Text(
+                  widget.newsData.bottomHeadline,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 2),
+                Text(
+                  widget.newsData.bottomText,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -8,12 +8,10 @@ class CurrentPageUriState {
   });
 }
 
+// This is used to store the current news page source website link.
 class CurrentPageSourceCubit extends Cubit<CurrentPageUriState> {
-  CurrentPageSourceCubit()
-      : super(CurrentPageUriState(
-            uri: 'https://www.geeksforgeeks.org/pageview-widget-in-flutter/'));
+  CurrentPageSourceCubit() : super(CurrentPageUriState(uri: ''));
   void updateCurrentPageSourceUrl({required String url}) {
-    print("11111111111111---$url");
     emit(CurrentPageUriState(uri: url));
   }
 }
