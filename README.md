@@ -16,19 +16,19 @@
 
 <h2>Some App Pages</h2>
 <h3>News Page</h3>
-<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/news_page.jpeg" alt="News Page" style="max-width: 100%;height: 500px;>
+<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/news_page.jpeg" alt="News Page" style="max-width: 100%;height: 500px;">
 
 <h3>Share Popup</h3>
-<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/share_popup.jpeg" alt="Share Popup" style="max-width: 100%;height: 500px;>
+<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/share_popup.jpeg" alt="Share Popup" style="max-width: 100%;height: 500px;">
 
 <h3>News Category Discover Page</h3>
-<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/discover_page.jpeg" alt="News Category Discover Page" style="max-width: 100%;height: 500px;>
+<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/discover_page.jpeg" alt="News Category Discover Page" style="max-width: 100%;height: 500px;">
 
 <h3>Settings</h3>
-<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/settings.jpeg" alt="Settings" style="max-width: 100%;height: 500px;>
+<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/settings.jpeg" alt="Settings" style="max-width: 100%;height: 500px;">
 
 <h3>News Page (in Hindi)</h3>
-<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/news_hindi.jpeg" alt="News Page (in Hindi)" style="max-width: 100%;height: 500px;>
+<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/news_hindi.jpeg" alt="News Page (in Hindi)" style="max-width: 100%;height: 500px;">
 
 <h3>Signup/Login Page</h3>
-<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/signup_login_page.jpeg" alt="Signup/Login Page" style="max-width: 100%;height: 500px;>
+<img src="https://github.com/vishwark/Inshorts-clone/blob/b45a69d1f4efeefaeaebd60f03401d7f62846d8a/signup_login_page.jpeg" alt="Signup/Login Page" style="max-width: 100%;height: 500px;">
