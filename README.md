@@ -2,6 +2,10 @@
 
 <p>A Flutter-based application inspired by the popular news aggregator app, Inshorts. This app provides concise and summarized news articles, allowing users to stay updated with current events efficiently.</p>
 
+<h3>Apk link</h3>
+<a href="https://drive.google.com/file/d/1jYz5XTS7BuV2d_DOr3qDxgIY13CW5vCX/view?usp=drivesdk">link</a>
+
+
 <h2>Features</h2>
 <ul>
     <li><strong>Concise News Summaries:</strong> View short, summarized news articles on various topics.</li>
